@@ -128,17 +128,30 @@ app.post("/api/contact", async (req: Request, res: Response): Promise<void> => {
       } catch (resendErr) {
         console.error("[RESEND FAILED]", resendErr);
       }
-    } else if (smtpHost && smtpUser && smtpPass) {
+    } else if (smtpUser && smtpPass) {
       try {
-        const transporter = nodemailer.createTransport({
-          host: smtpHost,
-          port: parseInt(process.env.SMTP_PORT || "587", 10),
-          secure: process.env.SMTP_SECURE === "true",
-          auth: {
-            user: smtpUser,
-            pass: smtpPass,
-          },
-        });
+        const cleanPass = smtpPass.replace(/\s+/g, "");
+        const isGmail = smtpHost?.includes("gmail") || smtpUser.includes("@gmail.com");
+
+        const transporter = nodemailer.createTransport(
+          isGmail
+            ? {
+                service: "gmail",
+                auth: {
+                  user: smtpUser,
+                  pass: cleanPass,
+                },
+              }
+            : {
+                host: smtpHost,
+                port: parseInt(process.env.SMTP_PORT || "465", 10),
+                secure: process.env.SMTP_SECURE === "true",
+                auth: {
+                  user: smtpUser,
+                  pass: cleanPass,
+                },
+              }
+        );
 
         await transporter.sendMail({
           from: `"Portfolio Contact" <${smtpUser}>`,
@@ -149,8 +162,8 @@ app.post("/api/contact", async (req: Request, res: Response): Promise<void> => {
         });
 
         emailDelivered = true;
-        deliveryMethod = "smtp-nodemailer";
-        console.log("[EMAIL SENT] Successfully sent via SMTP");
+        deliveryMethod = "smtp-gmail";
+        console.log("[EMAIL SENT] Successfully sent via Gmail SMTP");
       } catch (smtpErr) {
         console.error("[SMTP ERROR]", smtpErr);
       }

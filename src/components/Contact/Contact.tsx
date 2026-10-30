@@ -90,46 +90,88 @@ export const Contact: React.FC = () => {
     setSubmitStatus("idle");
     setStatusMessage("");
 
+    let sentSuccessfully = false;
+    let successMessage = "";
+
+    // Step 1: Try local Express server or Vercel Serverless Function first
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setSubmitStatus("success");
-        setStatusMessage(
-          data.message ||
-            "Thank you! Your message has been sent successfully. I'll get back to you as soon as possible."
-        );
-        setFormData({
-          name: "",
-          email: "",
-          subject: "",
-          message: "",
-          _honeypot: "",
-        });
-      } else {
-        setSubmitStatus("error");
-        setStatusMessage(
-          data.error || "Unable to send message through the server. You can also email me directly."
-        );
-        setShowMailtoFallback(true);
+      const contentType = response.headers.get("content-type") || "";
+      if (response.ok && contentType.includes("application/json")) {
+        const data = await response.json();
+        if (data && data.success) {
+          sentSuccessfully = true;
+          successMessage =
+            data.message ||
+            "Thank you! Your message has been sent successfully. I'll get back to you as soon as possible.";
+        }
       }
-    } catch (err) {
+    } catch {
+      // Primary serverless endpoint unreachable, automatically attempting direct relay
+    }
+
+    // Step 2: Automatic Direct Relay fallback (ensures messages arrive on Vercel without backend keys)
+    if (!sentSuccessfully) {
+      try {
+        const directRes = await fetch(
+          `https://formsubmit.co/ajax/${encodeURIComponent(PROFILE.email)}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              name: formData.name,
+              email: formData.email,
+              _subject: `[Portfolio Contact] ${formData.subject}`,
+              message: formData.message,
+              _captcha: "false",
+              _template: "table",
+            }),
+          }
+        );
+
+        if (directRes.ok) {
+          sentSuccessfully = true;
+          successMessage =
+            "Thank you! Your message has been sent directly to Januario's email. I'll get back to you as soon as possible.";
+        }
+      } catch (relayErr) {
+        console.warn("Direct relay unreachable:", relayErr);
+      }
+    }
+
+    if (sentSuccessfully) {
+      setSubmitStatus("success");
+      setStatusMessage(
+        successMessage ||
+          "Thank you! Your message has been sent successfully. I'll get back to you as soon as possible."
+      );
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+        _honeypot: "",
+      });
+      setShowMailtoFallback(false);
+    } else {
       setSubmitStatus("error");
       setStatusMessage(
         "Network connection or server error. You can directly reach me via email below."
       );
       setShowMailtoFallback(true);
-    } finally {
-      setSubmitting(false);
     }
+    setSubmitting(false);
   };
 
   // Generate mailto link as resilient backup
