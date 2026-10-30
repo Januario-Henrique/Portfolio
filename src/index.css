@@ -44,3 +44,70 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Print styles for ATS-friendly Resume PDF */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    overflow: visible !important;
+  }
+
+  /* Hide regular page elements */
+  header, footer, main, .no-print, [role="dialog"] > div > div:first-child, [role="dialog"] > div > div:nth-child(2) {
+    display: none !important;
+  }
+
+  /* Reset modal container for full-page printable document */
+  [role="dialog"] {
+    position: static !important;
+    padding: 0 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  [role="dialog"] > div {
+    max-width: 100% !important;
+    max-height: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+
+  .cv-document-body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    padding: 20mm !important;
+  }
+
+  .cv-document-body h1,
+  .cv-document-body h2,
+  .cv-document-body h3,
+  .cv-document-body p,
+  .cv-document-body span,
+  .cv-document-body li,
+  .cv-document-body a {
+    color: #111827 !important;
+  }
+
+  .cv-document-body h2 {
+    color: #059669 !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  .cv-document-body .text-emerald-400,
+  .cv-document-body .text-emerald-300 {
+    color: #059669 !important;
+  }
+
+  .cv-document-body .text-slate-400,
+  .cv-document-body .text-slate-300 {
+    color: #4b5563 !important;
+  }
+
+  .cv-document-body .border-white\/10 {
+    border-color: #e5e7eb !important;
+  }
+}
+

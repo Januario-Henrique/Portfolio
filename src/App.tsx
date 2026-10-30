@@ -18,14 +18,19 @@ import { ResumeSection } from "./components/Resume/Resume";
 import { Contact } from "./components/Contact/Contact";
 import { Footer } from "./components/Footer/Footer";
 import { CvModal } from "./components/Resume/CvModal";
+import { DeployModal } from "./components/Deploy/DeployModal";
 
 export default function App() {
   const [cvModalOpen, setCvModalOpen] = useState(false);
+  const [deployModalOpen, setDeployModalOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-slate-100 flex flex-col selection:bg-emerald-500/20 selection:text-emerald-400">
       {/* Sticky Navigation */}
-      <Navbar onOpenCvModal={() => setCvModalOpen(true)} />
+      <Navbar
+        onOpenCvModal={() => setCvModalOpen(true)}
+        onOpenDeployModal={() => setDeployModalOpen(true)}
+      />
 
       {/* Main Content Sections */}
       <main className="flex-grow">
@@ -43,12 +48,18 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <Footer />
+      <Footer onOpenDeployModal={() => setDeployModalOpen(true)} />
 
       {/* ATS-Style Curriculum Vitae Modal */}
       <CvModal
         isOpen={cvModalOpen}
         onClose={() => setCvModalOpen(false)}
+      />
+
+      {/* Free Deployment Guide Modal (Vercel, Netlify, GitHub Pages) */}
+      <DeployModal
+        isOpen={deployModalOpen}
+        onClose={() => setDeployModalOpen(false)}
       />
     </div>
   );

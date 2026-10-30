@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { PROFILE } from "../../data/social";
-import { Github, Linkedin, Mail, Menu, X, FileText, ArrowUpRight } from "lucide-react";
+import { Github, Linkedin, Mail, Menu, X, FileText, ArrowUpRight, Rocket } from "lucide-react";
 
 interface NavbarProps {
   onOpenCvModal: () => void;
+  onOpenDeployModal?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal, onOpenDeployModal }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -106,6 +107,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal }) => {
             >
               <Linkedin className="w-4 h-4" />
             </a>
+            {onOpenDeployModal && (
+              <button
+                onClick={onOpenDeployModal}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-emerald-400 bg-[#151B23] hover:bg-emerald-500/10 border border-white/10 hover:border-emerald-500/30 rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                title="Guia de publicação gratuita na Vercel"
+              >
+                <Rocket className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Deploy Free</span>
+              </button>
+            )}
             <button
               onClick={onOpenCvModal}
               className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#151B23] hover:bg-emerald-500/10 border border-emerald-500/30 hover:border-emerald-500 text-emerald-400 hover:text-emerald-300 rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 whitespace-nowrap"

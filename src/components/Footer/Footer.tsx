@@ -1,8 +1,12 @@
 import React from "react";
 import { PROFILE } from "../../data/social";
-import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUp, Rocket } from "lucide-react";
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onOpenDeployModal?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenDeployModal }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -16,9 +20,21 @@ export const Footer: React.FC = () => {
             <p className="font-medium text-white">
               © 2026 {PROFILE.name}
             </p>
-            <p className="text-slate-400">
-              Software Engineering Student • Full Stack Developer
-            </p>
+            <div className="flex items-center justify-center md:justify-start gap-2 text-slate-400">
+              <span>Software Engineering Student • Full Stack Developer</span>
+              {onOpenDeployModal && (
+                <>
+                  <span>•</span>
+                  <button
+                    onClick={onOpenDeployModal}
+                    className="text-emerald-400 hover:text-emerald-300 font-medium inline-flex items-center gap-1 hover:underline"
+                  >
+                    <Rocket className="w-3 h-3" />
+                    <span>Publicar na Vercel</span>
+                  </button>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Social Links */}
