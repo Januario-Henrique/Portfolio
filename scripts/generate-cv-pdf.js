@@ -47,11 +47,11 @@ y += 6;
 
 // Contact info bar
 doc.setFont("helvetica", "normal");
-doc.setFontSize(9);
+doc.setFontSize(8.5);
 doc.setTextColor(mutedText[0], mutedText[1], mutedText[2]);
-const contactLine = "Kigali, Rwanda  |  januarioinocenciohenriques@gmail.com  |  github.com/Januario-Henrique  |  linkedin.com/in/januario-henrique-98335a314";
+const contactLine = "Kigali, Rwanda  •  januarioinocenciohenriques@gmail.com  •  github.com/Januario-Henrique  •  LinkedIn: januario-henrique";
 doc.text(contactLine, margin, y);
-y += 6;
+y += 5.5;
 
 // Thin divider
 doc.setDrawColor(lineLight[0], lineLight[1], lineLight[2]);

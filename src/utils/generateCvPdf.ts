@@ -46,7 +46,7 @@ export function generateAndDownloadCvPdf() {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8.5);
   doc.setTextColor(mutedText[0], mutedText[1], mutedText[2]);
-  const contactText = `${PROFILE.location}  |  ${PROFILE.email}  |  github.com/${PROFILE.githubUsername}  |  linkedin.com/in/januario-henrique-98335a314`;
+  const contactText = `${PROFILE.location}  •  ${PROFILE.email}  •  github.com/${PROFILE.githubUsername}  •  LinkedIn: januario-henrique`;
   doc.text(contactText, margin, y);
   y += 5;
 
