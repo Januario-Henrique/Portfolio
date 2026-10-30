@@ -1,7 +1,11 @@
 import express, { Request, Response } from "express";
 import path from "path";
+import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -187,6 +191,14 @@ app.post("/api/contact", async (req: Request, res: Response): Promise<void> => {
 // Setup Vite in development or serve static in production
 async function startServer() {
   const isProduction = process.env.NODE_ENV === "production";
+
+  // Direct CV PDF Endpoints
+  const cvFilePath = path.resolve(__dirname, "public/assets/Januario-Henrique-CV.pdf");
+  app.get(["/cv", "/download-cv", "/assets/Januario-Henrique-CV.pdf"], (_req: Request, res: Response) => {
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", 'inline; filename="Januario-Henrique-CV.pdf"');
+    res.sendFile(cvFilePath);
+  });
 
   if (!isProduction) {
     const { createServer: createViteServer } = await import("vite");

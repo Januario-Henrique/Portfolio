@@ -6,8 +6,35 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/((?!api/).*)",
+      "source": "/cv",
+      "destination": "/assets/Januario-Henrique-CV.pdf"
+    },
+    {
+      "source": "/download-cv",
+      "destination": "/assets/Januario-Henrique-CV.pdf"
+    },
+    {
+      "source": "/((?!api/|assets/).*)",
       "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/Januario-Henrique-CV.pdf",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/pdf"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline; filename=\"Januario-Henrique-CV.pdf\""
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
     }
   ]
 }
